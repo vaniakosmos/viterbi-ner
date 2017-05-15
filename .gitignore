@@ -1,0 +1,8 @@
+archive
+visual
+misc
+
+corpus/*
+!corpus/README.md
+
+result/*
