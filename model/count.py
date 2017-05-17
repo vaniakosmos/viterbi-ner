@@ -43,38 +43,43 @@ def count_words():
 
 def count_n_grams():
     """
-    Count tag n-grams.
-    Save result in file using format:
-        {N}-GRAM {count} {n-gram...}
-    Examples:
-        1-GRAM  8286    I-LOC
-        2-GRAM  86      I-MISC I-ORG
-        3-GRAM  10      I-LOC B-LOC O
-    """
+        Count tag n-grams.
+        Save result in file using format:
+            {N}-GRAM {count} {n-gram...}
+        Examples:
+            1-GRAM  7650    I-LOC I-NP
+            2-GRAM  193     O I-VP O I-NP
+            3-GRAM  21      I-PER I-NP O I-VP O I-NP
+        """
     ngram_counts = {
         '1': {},
         '2': {},
         '3': {},
     }
-    two, tri = ['*'], ['*', '*']
+    init = ['O', 'I-NP']
+
+    two, tri = list(init), list(init * 2)
 
     for word, pos, syn, tag in corpus_iter():
-        two.append(tag)
-        tri.append(tag)
+        next_gram = [tag, syn]
+
+        two.extend(next_gram)
+        tri.extend(next_gram)
 
         # 1-gram
-        increment_dict(ngram_counts['1'], tag)
+        nragm = ' '.join(next_gram)
+        increment_dict(ngram_counts['1'], nragm)
 
         # 2-gram
-        ngram = ' '.join(two[-2:])
+        ngram = ' '.join(two[-4:])
         increment_dict(ngram_counts['2'], ngram)
 
         # 3-gram
-        ngram = ' '.join(tri[-3:])
+        ngram = ' '.join(tri[-6:])
         increment_dict(ngram_counts['3'], ngram)
 
         if word == '.':
-            two, tri = ['*'], ['*', '*']
+            two, tri = list(init), list(init * 2)
 
     with open('data/ngrams.count', 'w') as file:
         for key, ngrams in ngram_counts.items():
@@ -91,8 +96,10 @@ def increment_dict(d: dict, key):
 
 
 def main():
-    count_words()
+    # count_words()
+    # print('... have counted words')
     count_n_grams()
+    print('... have counted n-grams')
 
 
 if __name__ == '__main__':
