@@ -1,4 +1,12 @@
-def corpus_iter():
+from pprint import pprint
+from typing import List
+
+from nltk.stem.snowball import SnowballStemmer
+from nltk.stem.wordnet import WordNetLemmatizer
+import re
+
+
+def corpus_iter() -> (str, str, str, str):
     """
     Iterate through every line in training data.
     Return tuple of strings for each line in following format:
@@ -88,6 +96,54 @@ def count_n_grams():
                 file.write(f'{key}-GRAM  {count:7s} {ngram}\n')
 
 
+def featurize(word, pos, syn, tag):
+    return [
+            f'{tag} {syn}',
+            syn,
+            pos,
+            tag,
+            str(word.islower()),
+            str(word.isnumeric())
+    ]
+
+
+def count_features():
+    n_feature = 5
+    counter = [{'uno': {}, 'duo': {}} for _ in range(n_feature)]
+    prev_features = check_sentence(n_feature, counter)
+
+    for word, pos, syn, tag in corpus_iter():
+        curr_features = featurize(word, pos, syn, tag)
+
+        bigram_features = list(map(lambda x: f'{x[0]} {x[1]}', zip(prev_features, curr_features)))
+
+        for c, ungram, bigram in zip(counter, curr_features, bigram_features):
+            increment_dict(c['uno'], ungram)
+            increment_dict(c['duo'], bigram)
+        prev_features = curr_features
+
+        if word == '.':
+            prev_features = check_sentence(n_feature, counter)
+
+    for i in range(n_feature):
+        c = counter[i]
+        with open(f'data/feature{i}.count', 'w') as file:
+            file.write(f'')
+            for typ in c:
+                for gram in c[typ]:
+                    count = c[typ][gram]
+                    file.write(f'{typ} {count} {gram}\n')
+
+    # pprint(counter, width=40)
+
+
+def check_sentence(n_feature, counter):
+    prev_features = ['*'] * n_feature
+    for c, ungram in zip(counter, prev_features):
+        increment_dict(c['uno'], ungram)
+    return prev_features
+
+
 def increment_dict(d: dict, key):
     if key not in d:
         d[key] = 1
@@ -98,9 +154,11 @@ def increment_dict(d: dict, key):
 def main():
     # count_words()
     # print('... have counted words')
-    count_n_grams()
-    print('... have counted n-grams')
+    # count_n_grams()
+    # print('... have counted n-grams')
+    count_features()
 
 
 if __name__ == '__main__':
-    main()
+    import cProfile
+    cProfile.run('main()')

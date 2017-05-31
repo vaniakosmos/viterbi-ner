@@ -1,15 +1,17 @@
 import re
-from pprint import pformat, pprint
+from math import log
+from pprint import pprint
+from typing import List, Tuple
+
+from model.count import featurize
 
 
 class Tagger(object):
-    def __init__(self, verbose=False):
-        self.logs = []
-        self.verbose = verbose
-
+    def __init__(self):
         self.tags = ('I-ORG', 'I-MISC', 'I-PER', 'I-LOC', 'B-LOC', 'B-MISC', 'B-ORG', 'O')
         self._set_words_count()
-        self._set_n_grams_count()
+        # self._set_n_grams_count()
+        self._set_features()
 
     def calculate(self, obs) -> list:
         """
@@ -18,6 +20,17 @@ class Tagger(object):
         :return: list of tuple: ({observation}, {tag})
         """
         pass
+
+    def _set_features(self):
+        self.n_feature = 5
+        self.features = [{'uno': {}, 'duo': {}} for _ in range(self.n_feature)]
+
+        for i in range(self.n_feature):
+            with open(f'data/feature{i}.count', 'r') as file:
+                for line in file:
+                    typ, count, *gram = line.split()
+                    gram = ' '.join(gram)
+                    self.features[i][typ][gram] = int(count)
 
     def _set_words_count(self):
         """
@@ -64,19 +77,6 @@ class Tagger(object):
                 elif '3-' in gram_type:
                     self.trigrams_count[ngram] = count
 
-    def print_logs(self, i=-1):
-        if i == -1:
-            for log in self.logs:
-                self._print_log(log)
-        else:
-            log = self.logs[i]
-            self._print_log(log)
-
-    def _print_log(self, log):
-        for line in log:
-            print(line)
-        print('\n' + ' -' * 33 + '\n')
-
 
 class NaiveTagger(Tagger):
     def calculate(self, obs):
@@ -98,74 +98,105 @@ class NaiveTagger(Tagger):
 
 
 class ViterbiTagger(Tagger):
-    def calculate(self, obs):
+    def calc_str(self, sentence: str):
+        obs = []
+        for word in sentence.split():  # tokenize sentence
+            pos = ''  # get POS tag
+            syn = ''  # get syntactic chunk
+            obs.append((word, pos, syn))
+        return self.calculate(obs)
+
+    def calculate(self, obs: List[Tuple[str, str, str]]):
+        """
+        :param obs: list of marked observations that was got from sentence, 
+            `[ (word, pos, syn) ]`
+        :return: list of tagged observations, 
+            `[ (word, NER tag) ]` 
+        """
         if not obs:
             return []
+        v = self.prob_seq(obs)
+        # pprint(v, width=60)
+        return self.backtrack_prob_seq(obs, v)
 
-        self.logs.append([])
+    def prob_seq(self, obs):
+        prev_features = '* *'.split()
+        v = [{'*': {'prob': 0, 'prev': '*', 'features': prev_features, 'word': '*'}}]
 
-        init = 'O I-NP'
-        v = [{init: {'prob': 1.0, 'prev': init, 'word': '*', 'emission': 1.0}}]
-
-        for word, *os in obs:
+        for word, pos, syn in obs:
             v.append({})
             if word in self.count_xy:
                 for tag in self.tags:
-                    emission = self.count_xy[word].get(tag, 0) / self.count_y[tag] * 10
-                    ngram = tag + ' ' + ' '.join(os)
-                    self._determine_max_transaction(word, ngram, emission, v)
+                    # emission = self.count_xy[word].get(tag, 0) / self.count_y[tag]
+                    emission = self.smooth(self.count_xy[word].get(tag, 0), self.count_y[tag])
+                    features = featurize(word, pos, syn, tag)
+                    v[-1][tag] = self.determine_max_transaction(features, v[-2], emission, word)
             else:
-                if not re.match(r'[A-Z].*', word) or len(v) == 2 and self.count_xy.get(word.lower(), None):
-                    tag = 'O'
-                else:
-                    tag = self._rules(v, word)
-                emission = 1.0
-                ngram = tag + ' ' + ' '.join(os)
-                self._determine_max_transaction(word, ngram, emission, v)
+                tag = self.apply_rules(word, pos, syn, v[-2])
+                emission = 0
+                features = featurize(word, pos, syn, tag)
+                v[-1][tag] = self.determine_max_transaction(features, v[-2], emission, word)
+        return v
 
-        tag_pos, o = max([(key, val) for key, val in v[-1].items()],
-                         key=lambda x: x[1]['prob'])
-        tag, *os = tag_pos.split()
+    def determine_max_transaction(self, features, prev_tags, emission, word):
+        tags_trans = []
+
+        for prev_tag in prev_tags:
+            prev_features = prev_tags[prev_tag]['features']
+            transition = prev_tags[prev_tag]['prob']
+
+            for i, f1, f2 in zip(range(1), prev_features, features):
+                uno_count = self.features[i]['uno'].get(f2, 0)
+                duo_count = self.features[i]['duo'].get(f'{f1} {f2}', 0)
+                transition += self.smooth(duo_count, uno_count)
+
+            tags_trans.append((prev_tag, transition, prev_features))
+
+        max_prev, max_trans, max_prev_features = max(tags_trans, key=lambda x: x[1])
+        prob = emission + max_trans
+        return {'prob': prob, 'prev': max_prev, 'features': features, 'word': word}
+
+    @staticmethod
+    def smooth(a, b):
+        if a == 0:
+            return -100
+        return log(a / b)
+
+    @staticmethod
+    def backtrack_prob_seq(obs, v):
+        tag, connected_tags = max(list(v[-1].items()), key=lambda x: x[1]['prob'])
 
         res = [(obs[-1][0], tag)]
-        previous = o['prev']
+        previous = connected_tags['prev']
         for i in range(1, len(v) - 1):
-            o = v[-i - 1][previous]
-            word, tag_pos = obs[-i - 1][0], previous
-            tag, *os = tag_pos.split()
+            connected_tags = v[-i-1][previous]
+            word, tag = obs[-i-1][0], previous
+            previous = connected_tags['prev']
             res.append((word, tag))
-            previous = o['prev']
         return res[::-1]
 
-    def _rules(self, v, word) -> str:
-        ngram = max(v[-2].keys(), key=lambda x: v[-2][x]['prob'])
-        prev_tag, syn = ngram.split()
-        prev_word = v[-2][ngram]['word'].lower()
-        if (prev_tag.endswith('PER') or
-                syn.endswith('VP')):
+    def apply_rules(self, word, pos, syn, prev_tags) -> str:
+        # todo: get prev and curr features as parameters
+        """
+        :return: tag determined by handwritten rules
+        """
+        if not re.match(r'[A-Z].*', word) or self.count_xy.get(word.lower(), None):
+            return 'O'
+
+        max_prev_tag = max(prev_tags.keys(), key=lambda x: prev_tags[x]['prob'])
+        prev_word = prev_tags[max_prev_tag]['word'].lower()
+
+        prev_syn, prev_pos, *_ = prev_tags[max_prev_tag]['features']
+
+        if (max_prev_tag.endswith('PER') or
+                prev_syn.endswith('VP')):
             return 'I-PER'
-        elif (prev_tag.endswith('ORG') or
+        elif (max_prev_tag.endswith('ORG') or
               re.match(r'[A-Z].*[A-Z].*', word) or
               prev_word == 'the'):
             return 'I-ORG'
         else:
             return 'I-PER'
-
-    def _determine_max_transaction(self, word, tag_pos, emission, v):
-        uno_count = self.unograms_count.get(tag_pos, 0)
-        cache = []
-
-        for prev_tag in v[-2]:
-            bi_count = self.bigrams_count.get(' '.join([prev_tag, tag_pos]), 0)
-            # tri_count = self.trigrams_count.get(' '.join([v[-2][prev_tag]['prev'], prev_tag, tag_pos]), 0)
-
-            transition = v[-2][prev_tag]['prob'] * (bi_count + 1) / (uno_count + 2)
-            cache.append((prev_tag, transition))
-
-        max_prev, max_t = max(cache, key=lambda x: x[1])
-        prob = emission * max_t
-        v[-1][tag_pos] = {'prob': prob, 'prev': max_prev, 'word': word, 'emission': emission}
-        self.logs[-1].append(f'{word:11s} {max_prev:15s} {tag_pos:15s} {emission:.3e} {max_t:.3e} {prob:.3e}')
 
 
 def tokenize(text: str) -> list:
@@ -178,7 +209,7 @@ def tokenize(text: str) -> list:
 
 
 def check_viterbi():
-    tagger = ViterbiTagger(verbose=False)
+    tagger = ViterbiTagger()
 
     with open('corpus/min.test') as file:
         obs = []
@@ -187,7 +218,7 @@ def check_viterbi():
             line = line.strip()
             if line:
                 word, pos, syn, tag = line.split()
-                obs.append((word, syn))
+                obs.append((word, pos, syn))
                 right.append(tag)
             else:
                 combos = tagger.calculate(obs)
@@ -195,6 +226,7 @@ def check_viterbi():
                 for word, tag in combos:
                     print(f' {word:11s} {tag:7s} {right.pop(0)}')
                 print()
+                # break
     # tagger.print_logs(-1)
 
 

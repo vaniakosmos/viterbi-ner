@@ -1,0 +1,50 @@
+uno 7375 *
+uno 170524 O
+uno 10001 I-ORG
+uno 4556 I-MISC
+uno 11128 I-PER
+uno 8286 I-LOC
+uno 11 B-LOC
+uno 37 B-MISC
+uno 24 B-ORG
+duo 5070 * O
+duo 5639 O I-ORG
+duo 6253 I-ORG O
+duo 3204 O I-MISC
+duo 3199 I-MISC O
+duo 142541 O O
+duo 696 * I-PER
+duo 4568 I-PER I-PER
+duo 78 I-PER I-LOC
+duo 6957 I-LOC O
+duo 3715 I-ORG I-ORG
+duo 1040 * I-LOC
+duo 5787 O I-PER
+duo 6479 I-PER O
+duo 5988 O I-LOC
+duo 1163 I-MISC I-MISC
+duo 117 * I-MISC
+duo 1166 I-LOC I-LOC
+duo 452 * I-ORG
+duo 11 I-LOC B-LOC
+duo 10 B-LOC O
+duo 86 I-MISC I-ORG
+duo 10 I-MISC I-LOC
+duo 35 I-MISC B-MISC
+duo 14 B-MISC O
+duo 10 I-ORG I-MISC
+duo 23 B-MISC I-MISC
+duo 1 I-PER I-MISC
+duo 102 I-LOC I-ORG
+duo 38 I-LOC I-MISC
+duo 61 I-MISC I-PER
+duo 8 I-ORG I-PER
+duo 8 I-LOC I-PER
+duo 3 I-ORG I-LOC
+duo 6 I-ORG B-ORG
+duo 18 B-ORG B-ORG
+duo 5 B-ORG I-ORG
+duo 1 B-ORG O
+duo 2 O B-MISC
+duo 1 B-LOC I-LOC
+duo 2 I-PER I-ORG

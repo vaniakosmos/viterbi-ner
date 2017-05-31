@@ -1,0 +1,153 @@
+uno 7375 *
+uno 28592 O
+uno 120255 I-NP
+uno 26702 I-VP
+uno 18692 I-PP
+uno 3777 B-NP
+uno 1280 I-SBAR
+uno 1374 I-ADJP
+uno 2753 I-ADVP
+uno 527 I-PRT
+uno 163 B-VP
+uno 254 B-PP
+uno 70 I-CONJP
+uno 60 I-INTJ
+uno 36 I-LST
+uno 22 B-ADVP
+uno 8 B-SBAR
+uno 2 B-ADJP
+duo 1897 * O
+duo 14244 O I-NP
+duo 12485 I-NP I-VP
+duo 9816 I-VP I-NP
+duo 68541 I-NP I-NP
+duo 8711 I-VP I-VP
+duo 21018 I-NP O
+duo 4755 * I-NP
+duo 3886 I-VP I-PP
+duo 17447 I-PP I-NP
+duo 3736 I-NP B-NP
+duo 802 B-NP I-VP
+duo 12305 I-NP I-PP
+duo 582 I-NP I-SBAR
+duo 1141 I-SBAR I-NP
+duo 323 I-VP I-SBAR
+duo 2699 B-NP I-NP
+duo 280 I-NP I-ADJP
+duo 360 I-ADJP I-PP
+duo 659 I-VP I-ADJP
+duo 353 I-ADJP O
+duo 2337 O O
+duo 1961 I-VP O
+duo 182 O I-SBAR
+duo 211 I-ADJP I-ADJP
+duo 174 I-ADJP I-NP
+duo 61 B-NP I-PP
+duo 3015 O I-VP
+duo 58 I-PP I-ADVP
+duo 470 I-ADVP I-VP
+duo 714 I-VP I-ADVP
+duo 850 I-ADVP I-NP
+duo 635 I-PP I-VP
+duo 157 I-PP O
+duo 205 I-ADJP I-VP
+duo 844 O I-PP
+duo 354 * I-PP
+duo 474 O I-ADVP
+duo 1163 I-NP I-ADVP
+duo 465 I-VP I-PRT
+duo 147 I-PRT I-PP
+duo 172 * I-VP
+duo 162 I-VP B-VP
+duo 111 B-VP I-VP
+duo 592 I-ADVP I-PP
+duo 577 I-ADVP O
+duo 251 I-PP B-PP
+duo 246 B-PP I-NP
+duo 117 O I-ADJP
+duo 229 I-PRT I-NP
+duo 2 I-VP I-CONJP
+duo 39 I-CONJP I-CONJP
+duo 18 I-CONJP I-NP
+duo 46 I-ADJP I-SBAR
+duo 103 I-PP I-PP
+duo 123 * I-ADVP
+duo 53 I-SBAR I-VP
+duo 2 I-PP I-INTJ
+duo 30 I-INTJ I-NP
+duo 2 B-VP O
+duo 14 * I-INTJ
+duo 1 I-INTJ I-PP
+duo 25 I-SBAR I-PP
+duo 126 B-NP O
+duo 15 O I-INTJ
+duo 41 B-NP B-NP
+duo 135 I-ADVP I-ADVP
+duo 27 I-PP I-ADJP
+duo 11 I-SBAR I-ADVP
+duo 35 * I-SBAR
+duo 15 B-NP I-SBAR
+duo 25 I-NP I-INTJ
+duo 24 * I-ADJP
+duo 55 I-ADVP I-SBAR
+duo 102 I-PRT O
+duo 24 I-INTJ O
+duo 10 I-NP I-LST
+duo 12 I-LST O
+duo 9 O I-PRT
+duo 6 I-ADVP I-LST
+duo 20 I-LST I-NP
+duo 48 I-NP I-PRT
+duo 16 O I-LST
+duo 28 I-PRT I-VP
+duo 7 B-VP I-PP
+duo 13 I-PRT I-ADVP
+duo 31 B-NP I-ADVP
+duo 44 I-ADVP I-ADJP
+duo 22 I-ADVP B-ADVP
+duo 7 B-ADVP I-NP
+duo 5 I-SBAR I-ADJP
+duo 5 B-VP I-ADVP
+duo 30 B-VP I-NP
+duo 21 I-ADJP I-ADVP
+duo 18 I-SBAR O
+duo 19 I-SBAR I-SBAR
+duo 1 I-ADVP I-PRT
+duo 3 B-VP I-ADJP
+duo 16 I-NP I-CONJP
+duo 4 I-INTJ I-VP
+duo 1 I-ADVP I-CONJP
+duo 1 I-CONJP I-PRT
+duo 2 B-ADVP I-SBAR
+duo 6 I-PRT I-SBAR
+duo 12 I-PP I-SBAR
+duo 3 B-PP B-PP
+duo 3 B-ADVP I-PP
+duo 8 I-SBAR B-SBAR
+duo 8 B-SBAR I-NP
+duo 4 I-LST I-LST
+duo 3 B-VP I-SBAR
+duo 1 I-ADJP I-CONJP
+duo 10 O I-CONJP
+duo 4 I-CONJP I-PP
+duo 3 I-VP I-INTJ
+duo 3 B-PP I-VP
+duo 1 B-VP B-VP
+duo 2 B-PP O
+duo 1 I-CONJP I-ADVP
+duo 2 I-ADJP B-ADJP
+duo 1 B-ADJP O
+duo 3 B-ADVP I-VP
+duo 1 * I-CONJP
+duo 2 I-CONJP O
+duo 1 I-ADJP I-PRT
+duo 4 I-CONJP I-VP
+duo 1 I-CONJP I-ADJP
+duo 4 B-ADVP I-ADVP
+duo 2 I-PRT I-ADJP
+duo 3 B-ADVP O
+duo 1 B-NP I-PRT
+duo 1 I-INTJ I-INTJ
+duo 1 B-NP I-ADJP
+duo 1 B-VP I-PRT
+duo 1 B-ADJP I-VP

@@ -29,7 +29,6 @@ accuracy:  93.48%; precision:  65.58%; recall:  64.92%; FB1:  65.25
              MISC: precision:  69.41%; recall:  51.65%; FB1:  59.23  922
               ORG: precision:  60.85%; recall:  53.79%; FB1:  57.10  1341
               PER: precision:  53.75%; recall:  67.85%; FB1:  59.98  1842
-
 eng.testb
 processed 46666 tokens with 5246 phrases; found: 5648 phrases; correct: 2924.
 accuracy:  90.84%; precision:  51.77%; recall:  55.74%; FB1:  53.68
@@ -37,7 +36,6 @@ accuracy:  90.84%; precision:  51.77%; recall:  55.74%; FB1:  53.68
              MISC: precision:  60.11%; recall:  40.69%; FB1:  48.53  702
               ORG: precision:  47.50%; recall:  51.67%; FB1:  49.50  1661
               PER: precision:  26.47%; recall:  44.63%; FB1:  33.23  1617
-
 ```
 
 
@@ -54,7 +52,6 @@ accuracy:  93.11%; precision:  65.01%; recall:  64.82%; FB1:  64.91
              MISC: precision:  69.74%; recall:  57.21%; FB1:  62.85  922
               ORG: precision:  56.52%; recall:  50.74%; FB1:  53.47  1341
               PER: precision:  54.34%; recall:  70.39%; FB1:  61.34  1842
-
 eng.testb
 processed 46666 tokens with 5188 phrases; found: 5648 phrases; correct: 2865.
 accuracy:  90.26%; precision:  50.73%; recall:  55.22%; FB1:  52.88
@@ -113,7 +110,6 @@ accuracy:  89.21%; precision:  65.56%; recall:  53.70%; FB1:  59.04
 
 - Emission: tag
 - Transition: tag + syn
-- -
 
 ```
 eng.testa
@@ -153,4 +149,27 @@ accuracy:  95.11%; precision:  77.32%; recall:  69.89%; FB1:  73.42
              MISC: precision:  66.38%; recall:  64.90%; FB1:  65.63  702
               ORG: precision:  67.55%; recall:  61.85%; FB1:  64.58  1661
               PER: precision:  91.59%; recall:  67.41%; FB1:  77.66  1617
+```
+
+---
+
+- Emission: tag
+- Transition: multiple features and separate probabilities [pos syn tag islower isnumeric] 
+- custom rules for rare words
+
+```
+eng.testa
+processed 51578 tokens with 6218 phrases; found: 5942 phrases; correct: 4924.
+accuracy:  96.90%; precision:  82.87%; recall:  79.19%; FB1:  80.99
+              LOC: precision:  81.87%; recall:  89.63%; FB1:  85.58  1837
+             MISC: precision:  77.11%; recall:  83.94%; FB1:  80.38  922
+              ORG: precision:  72.86%; recall:  65.84%; FB1:  69.17  1341
+              PER: precision:  94.03%; recall:  78.41%; FB1:  85.51  1842
+eng.testb
+processed 46666 tokens with 6020 phrases; found: 5648 phrases; correct: 4318.
+accuracy:  95.54%; precision:  76.45%; recall:  71.73%; FB1:  74.01
+              LOC: precision:  78.24%; recall:  85.07%; FB1:  81.51  1668
+             MISC: precision:  65.10%; recall:  66.91%; FB1:  65.99  702
+              ORG: precision:  65.92%; recall:  64.11%; FB1:  65.00  1661
+              PER: precision:  90.35%; recall:  69.74%; FB1:  78.72  1617
 ```

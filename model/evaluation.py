@@ -13,7 +13,7 @@ def write_result(test_file, tagger):
             line = line.strip()
             if line:
                 word, pos, syn, tag = line.split()
-                obs.append((word, syn))
+                obs.append((word, pos, syn))
                 original.append((tag, syn))
             else:
                 combos = tagger.calculate(obs)
@@ -36,8 +36,8 @@ def write_result(test_file, tagger):
 
 
 def main():
-    # tagger = NaiveTagger(verbose=False)
-    tagger = ViterbiTagger(verbose=False)
+    # tagger = NaiveTagger()
+    tagger = ViterbiTagger()
 
     files = [
         'eng.testa',
